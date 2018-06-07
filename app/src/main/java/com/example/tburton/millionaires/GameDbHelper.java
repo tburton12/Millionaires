@@ -22,13 +22,6 @@ public class GameDbHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         this.db = db;
 
-        /*
-        public static final String TABLE_NAME = "questions";
-        public static final String COLUMN_QUESTION = "question_text";
-        public static final String COLUMN_STAGE = "question_stage"
-        public static final String COLUMN_PRIZE = "prize"
-        public static final String COLUMN_CORRECT_ANSWER_LETTER = "correct_answer_letter";
-         */
         final String SQL_CREATE_QUESTIONS_TABLE = "CREATE TABLE " +
                 QuestionsTable.TABLE_NAME + " ( " +
                 QuestionsTable._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -39,15 +32,6 @@ public class GameDbHelper extends SQLiteOpenHelper {
                 ")";
 
         db.execSQL(SQL_CREATE_QUESTIONS_TABLE);
-
-        /*
-        public static class AnswersTable implements BaseColumns{
-        public static final String TABLE_NAME = "answers";
-        public static final String COLUMN_ANSWER_TEXT = "answer_text";
-        public static final String QUESTION_ID = "question_ID";
-        public static final String COLUMN_ANSWER_LETTER = "answer_letter";
-    }
-         */
 
         // TODO Add Foreign Key
         final String SQL_CREATE_ANSWERS_TABLE = "CREATE TABLE " +
@@ -60,7 +44,8 @@ public class GameDbHelper extends SQLiteOpenHelper {
 
         db.execSQL(SQL_CREATE_ANSWERS_TABLE);
 
-    //    fillQuestionsTable();
+        fillQuestionsTable();
+        fillAnswersTable();
     }
 
     @Override
@@ -69,7 +54,6 @@ public class GameDbHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    // TODO Call it
     // Values for questions table are hardcoded for now
     private void fillQuestionsTable() {
         ContentValues values = new ContentValues();
@@ -131,24 +115,9 @@ public class GameDbHelper extends SQLiteOpenHelper {
 
     }
 
-    /*
-public static final String TABLE_NAME = "questions";
-public static final String COLUMN_QUESTION = "question_text";
-public static final String COLUMN_STAGE = "question_stage"
-public static final String COLUMN_PRIZE = "prize"
-public static final String COLUMN_CORRECT_ANSWER_LETTER = "correct_answer_letter";
- */
-
     private void addQuestion(ContentValues values) {
         db.insert(QuestionsTable.TABLE_NAME, null, values);
     }
-
-    /*
-        public static final String TABLE_NAME = "answers";
-        public static final String COLUMN_ANSWER_TEXT = "answer_text";
-        public static final String QUESTION_ID = "question_ID";
-        public static final String COLUMN_ANSWER_LETTER = "answer_letter";
-     */
 
     // Values for answers table are hardcoded for now
     private void fillAnswersTable() {
@@ -305,7 +274,6 @@ public static final String COLUMN_CORRECT_ANSWER_LETTER = "correct_answer_letter
         values.put(AnswersTable.COLUMN_ANSWER_LETTER, "C");
         addAnswer(values);
         values.clear();
-
     }
 
     private void addAnswer(ContentValues values) {
