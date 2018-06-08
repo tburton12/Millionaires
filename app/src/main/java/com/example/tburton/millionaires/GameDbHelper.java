@@ -2,10 +2,14 @@ package com.example.tburton.millionaires;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.example.tburton.millionaires.GameContract.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class GameDbHelper extends SQLiteOpenHelper {
 
@@ -33,14 +37,14 @@ public class GameDbHelper extends SQLiteOpenHelper {
 
         db.execSQL(SQL_CREATE_QUESTIONS_TABLE);
 
-        // TODO Add Foreign Key
         final String SQL_CREATE_ANSWERS_TABLE = "CREATE TABLE " +
                 AnswersTable.TABLE_NAME + " ( " +
                 AnswersTable._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 AnswersTable.COLUMN_ANSWER_TEXT + " TEXT, " +
                 AnswersTable.QUESTION_ID + " int, " +
-                AnswersTable.COLUMN_ANSWER_LETTER + " CHAR " +
-                "FOREIGN KEY (" + AnswersTable.QUESTION_ID + ") REFERENCES     " +
+                AnswersTable.COLUMN_ANSWER_LETTER + " CHAR, " +
+                "FOREIGN KEY (" + AnswersTable.QUESTION_ID + ") " +
+                "REFERENCES " + QuestionsTable.TABLE_NAME + " (" + QuestionsTable._ID + ")" +
                 ")";
 
         db.execSQL(SQL_CREATE_ANSWERS_TABLE);
@@ -279,5 +283,83 @@ public class GameDbHelper extends SQLiteOpenHelper {
 
     private void addAnswer(ContentValues values) {
         db.insert(AnswersTable.TABLE_NAME, null, values);
+    }
+
+    /*
+    SELECT
+	q.question_text,
+	q.question_stage,
+	q.question_prize,
+	q.correct_answer_letter,
+
+	-- optionA
+	(SELECT a1.answer_text
+		FROM answers a1
+		WHERE a1.question_ID = q.ID
+		AND a1.answer_letter = 'A'
+	) AS optionA,
+
+	-- optionB
+	(SELECT a1.answer_text
+		FROM answers a1
+		WHERE a1.question_ID = q.ID
+		AND a1.answer_letter = 'B'
+	) AS optionB,
+
+	-- optionC
+	(SELECT a1.answer_text
+		FROM answers a1
+		WHERE a1.question_ID = q.ID
+		AND a1.answer_letter = 'C'
+	) AS optionC
+
+FROM
+	questions q;
+     */
+
+    // Not sure about QuestionsTable._ID / q._ID
+    public List<Question> getAllQuestionsAndAnswersFromDatabase() {
+        List<Question> questionList = new ArrayList<>();
+        db = getReadableDatabase();
+        Cursor cursor = db.rawQuery(
+            "SELECT" +
+            " q." + QuestionsTable.COLUMN_QUESTION_TEXT +
+            ", q." + QuestionsTable.COLUMN_STAGE +
+            ", q." + QuestionsTable.COLUMN_PRIZE +
+            ", q." + QuestionsTable.COLUMN_CORRECT_ANSWER_LETTER +
+            // Option A
+            ", (SELECT a1." + AnswersTable.COLUMN_ANSWER_TEXT +
+            " FROM " + AnswersTable.TABLE_NAME + " a1 " +
+            "WHERE a1." + AnswersTable.QUESTION_ID + " = q._ID " +
+            "AND a1." + AnswersTable.COLUMN_ANSWER_LETTER + " = 'A') AS optionA" +
+            // Option B
+            ", (SELECT a1." + AnswersTable.COLUMN_ANSWER_TEXT +
+            " FROM " + AnswersTable.TABLE_NAME + " a1 " +
+            "WHERE a1." + AnswersTable.QUESTION_ID + " = q._ID " +
+            "AND a1." + AnswersTable.COLUMN_ANSWER_LETTER + " = 'B') AS optionB" +
+            // Option C
+            ", (SELECT a1." + AnswersTable.COLUMN_ANSWER_TEXT +
+            " FROM " + AnswersTable.TABLE_NAME + " a1 " +
+            "WHERE a1." + AnswersTable.QUESTION_ID + " = q._ID " +
+            "AND a1." + AnswersTable.COLUMN_ANSWER_LETTER + " = 'C') AS optionC " +
+            "FROM " + QuestionsTable.TABLE_NAME + "q",
+            null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                Question question = new Question();
+                question.setQuestion_text(cursor.getString(cursor.getColumnIndex(QuestionsTable.COLUMN_QUESTION_TEXT)));
+                question.setQuestion_stage(cursor.getInt(cursor.getColumnIndex(QuestionsTable.COLUMN_STAGE)));
+                question.setQuestion_prize(cursor.getInt(cursor.getColumnIndex(QuestionsTable.COLUMN_PRIZE)));
+                question.setCorrect_answer_letter(cursor.getString(cursor.getColumnIndex(QuestionsTable.COLUMN_CORRECT_ANSWER_LETTER)));
+                question.setOptionA(cursor.getString(cursor.getColumnIndex("optionA")));
+                question.setOptionB(cursor.getString(cursor.getColumnIndex("optionB")));
+                question.setOptionC(cursor.getString(cursor.getColumnIndex("optionC")));
+                questionList.add(question);
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+        return questionList;
     }
 }

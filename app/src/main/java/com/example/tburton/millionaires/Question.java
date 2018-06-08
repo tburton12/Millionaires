@@ -24,9 +24,12 @@ public class Question {
     private String optionA;
     private String optionB;
     private String optionC;
-    private char correct_answer_letter;
+    private String correct_answer_letter;
 
-    public Question(String question_text, int question_stage, int question_prize, String optionA, String optionB, String optionC, char correct_answer_letter) {
+    public Question(){
+    }
+
+    public Question(String question_text, int question_stage, int question_prize, String optionA, String optionB, String optionC, String correct_answer_letter) {
         this.question_text = question_text;
         this.question_stage = question_stage;
         this.question_prize = question_prize;
@@ -84,11 +87,11 @@ public class Question {
         this.optionC = optionC;
     }
 
-    public char getCorrect_answer_letter() {
+    public String getCorrect_answer_letter() {
         return correct_answer_letter;
     }
 
-    public void setCorrect_answer_letter(char correct_answer_letter) {
+    public void setCorrect_answer_letter(String correct_answer_letter) {
         this.correct_answer_letter = correct_answer_letter;
     }
 }
