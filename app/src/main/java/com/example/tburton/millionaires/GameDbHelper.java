@@ -39,7 +39,8 @@ public class GameDbHelper extends SQLiteOpenHelper {
                 AnswersTable._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 AnswersTable.COLUMN_ANSWER_TEXT + " TEXT, " +
                 AnswersTable.QUESTION_ID + " int, " +
-                AnswersTable.COLUMN_ANSWER_LETTER + " CHAR" +
+                AnswersTable.COLUMN_ANSWER_LETTER + " CHAR " +
+                "FOREIGN KEY (" + AnswersTable.QUESTION_ID + ") REFERENCES     " +
                 ")";
 
         db.execSQL(SQL_CREATE_ANSWERS_TABLE);
