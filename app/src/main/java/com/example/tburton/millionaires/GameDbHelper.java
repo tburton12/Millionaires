@@ -342,7 +342,7 @@ FROM
             " FROM " + AnswersTable.TABLE_NAME + " a1 " +
             "WHERE a1." + AnswersTable.QUESTION_ID + " = q._ID " +
             "AND a1." + AnswersTable.COLUMN_ANSWER_LETTER + " = 'C') AS optionC " +
-            "FROM " + QuestionsTable.TABLE_NAME + "q",
+            "FROM " + QuestionsTable.TABLE_NAME + " q",
             null);
 
         if (cursor.moveToFirst()) {
