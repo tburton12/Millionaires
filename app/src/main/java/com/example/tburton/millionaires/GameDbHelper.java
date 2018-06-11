@@ -317,7 +317,6 @@ FROM
 	questions q;
      */
 
-    // Not sure about QuestionsTable._ID / q._ID
     public List<Question> getAllQuestionsAndAnswersFromDatabase() {
         List<Question> questionList = new ArrayList<>();
         db = getReadableDatabase();

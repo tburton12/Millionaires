@@ -1,5 +1,7 @@
 package com.example.tburton.millionaires;
 
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -9,7 +11,6 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.Collections;
 import java.util.List;
 
 public class GameActivity extends AppCompatActivity {
@@ -21,11 +22,12 @@ public class GameActivity extends AppCompatActivity {
     private RadioButton rb2;
     private RadioButton rb3;
     private Button buttonConfirmNext;
+    private ColorStateList defaultTextColor;
 
     private List<Question> questionList;
 
     private int questionCurrentStage;
-    private int questionTotalStages = 7;    // number of stages in real TV Show
+    private int questionTotalStages = 8;    // number of stages in real TV Show
     private Question currentQuestion;
 
     private int credits;
@@ -44,6 +46,8 @@ public class GameActivity extends AppCompatActivity {
         rb2 = findViewById(R.id.radio_button2);
         rb3 = findViewById(R.id.radio_button3);
         buttonConfirmNext = findViewById(R.id.button_confirm_next);
+
+        defaultTextColor = rb1.getTextColors();
 
         GameDbHelper dbHelper = new GameDbHelper(this);
         questionList = dbHelper.getAllQuestionsAndAnswersFromDatabase();
@@ -67,17 +71,20 @@ public class GameActivity extends AppCompatActivity {
 
     }
 
-    // TODO: Add green and red text color according to the answer correctness
     private void showNextQuestion() {
         rbGroup.clearCheck();
 
-        if (questionCurrentStage <= questionTotalStages) {
+        if (questionCurrentStage < questionTotalStages) {
             currentQuestion = questionList.get(questionCurrentStage);
 
             textViewQuestion.setText(currentQuestion.getQuestion_text());
             rb1.setText(currentQuestion.getOptionA());
             rb2.setText(currentQuestion.getOptionB());
             rb3.setText(currentQuestion.getOptionC());
+
+            rb1.setTextColor(defaultTextColor);
+            rb2.setTextColor((defaultTextColor));
+            rb3.setTextColor((defaultTextColor));
 
             questionCurrentStage++;
             textViewStage.setText("Stage: " + questionCurrentStage + "/" + questionTotalStages);
@@ -119,19 +126,26 @@ public class GameActivity extends AppCompatActivity {
     }
 
     private void showSolution(){
+        rb1.setTextColor(Color.RED);
+        rb2.setTextColor((Color.RED));
+        rb3.setTextColor((Color.RED));
+
         switch (currentQuestion.getCorrect_answer_letter()) {
             case "A":
                 Toast.makeText(GameActivity.this, "Answer A is correct", Toast.LENGTH_LONG).show();
+                rb1.setTextColor((Color.GREEN));
                 break;
             case "B":
                 Toast.makeText(GameActivity.this, "Answer B is correct", Toast.LENGTH_LONG).show();
+                rb2.setTextColor((Color.GREEN));
                 break;
             case "C":
                 Toast.makeText(GameActivity.this, "Answer C is correct", Toast.LENGTH_LONG).show();
+                rb3.setTextColor((Color.GREEN));
                 break;
         }
 
-        if (questionCurrentStage <= questionTotalStages) {
+        if (questionCurrentStage < questionTotalStages) {
             buttonConfirmNext.setText("Next");
         } else {
             buttonConfirmNext.setText("Finish");
