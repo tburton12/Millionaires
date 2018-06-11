@@ -4,6 +4,7 @@ import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.List;
+import java.util.Objects;
 
 public class GameActivity extends AppCompatActivity {
     private TextView textViewQuestion;
@@ -114,9 +116,10 @@ public class GameActivity extends AppCompatActivity {
                 break;
         }
 
-        if (selectedAnswer == currentQuestion.getCorrect_answer_letter()) {
+        // if selected answer is correct
+        if (selectedAnswer.equals(currentQuestion.getCorrect_answer_letter())) {
             credits = currentQuestion.getQuestion_prize();
-            textViewCredits.setText("Credits: " + credits);
+            textViewCredits.setText("Credits: " + credits + "$");
             showSolution();
         }   else    {
             showSolution();
@@ -132,15 +135,15 @@ public class GameActivity extends AppCompatActivity {
 
         switch (currentQuestion.getCorrect_answer_letter()) {
             case "A":
-                Toast.makeText(GameActivity.this, "Answer A is correct", Toast.LENGTH_LONG).show();
+            //    Toast.makeText(GameActivity.this, "Answer A is correct", Toast.LENGTH_LONG).show();
                 rb1.setTextColor((Color.GREEN));
                 break;
             case "B":
-                Toast.makeText(GameActivity.this, "Answer B is correct", Toast.LENGTH_LONG).show();
+            //    Toast.makeText(GameActivity.this, "Answer B is correct", Toast.LENGTH_LONG).show();
                 rb2.setTextColor((Color.GREEN));
                 break;
             case "C":
-                Toast.makeText(GameActivity.this, "Answer C is correct", Toast.LENGTH_LONG).show();
+            //    Toast.makeText(GameActivity.this, "Answer C is correct", Toast.LENGTH_LONG).show();
                 rb3.setTextColor((Color.GREEN));
                 break;
         }
