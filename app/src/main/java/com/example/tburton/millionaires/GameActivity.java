@@ -1,5 +1,6 @@
 package com.example.tburton.millionaires;
 
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
@@ -91,6 +92,8 @@ public class GameActivity extends AppCompatActivity {
             answered = false;
             buttonConfirmNext.setText("Confirm");
         } else {
+            Intent intent = new Intent(GameActivity.this, GameWon.class);
+            startActivity(intent);
             finishGame();
         }
     }
@@ -121,7 +124,6 @@ public class GameActivity extends AppCompatActivity {
             showSolution();
         }   else    {
             showSolution();
-            //TODO: Go to 'game over' screen
         }
 
     }
