@@ -9,26 +9,38 @@
     tools:context=".GameWon">
 
     <TextView
-        android:id="@+id/text_view_credits"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="200dp"
-        android:text="$"
-        android:textColor="@color/colorText" />
-
-    <TextView
         android:id="@+id/text_view_congratulations"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="105dp"
-        android:text="Congratulations!\nYou won:"
+        android:layout_marginTop="97dp"
+        android:text="Congratulations!"
         android:textAlignment="center"
         android:textColor="@color/colorText"
         android:textSize="36sp" />
+
+    <TextView
+        android:id="@+id/text_view_you_won"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/text_view_credits"
+        android:layout_centerHorizontal="true"
+        android:text="You won:"
+        android:textAlignment="center"
+        android:textColor="@color/colorText"
+        android:textSize="32sp" />
+
+    <TextView
+        android:id="@+id/text_view_credits"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="196dp"
+        android:text="$"
+        android:textColor="@color/colorText"
+        android:textSize="32sp" />
 
     <Button
         android:id="@+id/button_confirm_finish"
