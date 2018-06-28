@@ -33,6 +33,7 @@ public class GameActivity extends AppCompatActivity {
 
     private int credits;
     private boolean answered;
+    private boolean gameLost = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +66,19 @@ public class GameActivity extends AppCompatActivity {
                         Toast.makeText(GameActivity.this, "You need to select an answer!", Toast.LENGTH_LONG).show();
                     }
                 } else {
-                    showNextQuestion();
+                    if(!gameLost) {
+                        showNextQuestion();
+                    }   else    {
+                        Intent intent = new Intent(GameActivity.this, GameLost.class);
+
+                        Bundle extras = new Bundle();
+                        extras.putInt("creditsGained", credits);
+                        intent.putExtras(extras);
+
+                        startActivity(intent);
+
+                        finishGame();
+                    }
                 }
             }
         });
@@ -123,6 +136,8 @@ public class GameActivity extends AppCompatActivity {
             textViewCredits.setText("Credits: " + credits + "$");
             showSolution();
         }   else    {
+            gameLost = true;
+            Toast.makeText(GameActivity.this, "Wrong answer!", Toast.LENGTH_LONG).show();
             showSolution();
         }
 
@@ -135,21 +150,22 @@ public class GameActivity extends AppCompatActivity {
 
         switch (currentQuestion.getCorrect_answer_letter()) {
             case "A":
-            //    Toast.makeText(GameActivity.this, "Answer A is correct", Toast.LENGTH_LONG).show();
                 rb1.setTextColor((Color.GREEN));
                 break;
             case "B":
-            //    Toast.makeText(GameActivity.this, "Answer B is correct", Toast.LENGTH_LONG).show();
                 rb2.setTextColor((Color.GREEN));
                 break;
             case "C":
-            //    Toast.makeText(GameActivity.this, "Answer C is correct", Toast.LENGTH_LONG).show();
                 rb3.setTextColor((Color.GREEN));
                 break;
         }
 
         if (questionCurrentStage < questionTotalStages) {
-            buttonConfirmNext.setText("Next");
+            if(gameLost == false) {
+                buttonConfirmNext.setText("Next");
+            }   else    {
+                buttonConfirmNext.setText("Finish");
+            }
         } else {
             buttonConfirmNext.setText("Finish");
         }

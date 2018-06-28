@@ -13,21 +13,31 @@ public class GameLost extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_lost);
 
+        Intent intent = getIntent();
+
+        int creditsGained = intent.getIntExtra("creditsGained", 0);
+        String creditsWon = "0";
+
+        if(creditsGained >= 1000){
+            creditsWon = "1.000";
+            if(creditsGained >= 32000){
+                creditsWon = "32.000";
+            }
+        }
+
         TextView textViewCredits;
         textViewCredits = findViewById(R.id.text_view_credits);
-        textViewCredits.setText("1.000.000 $");
+
+        textViewCredits.setText("Your guaranteed prize:\n" + creditsWon + "$");
 
         Button buttonFinishGame = findViewById(R.id.button_confirm_finish);
 
-        // TODO: if won money then set value, else left empty
-        if(true) {
-            buttonFinishGame.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    finishGame();
-                }
-            });
-        }
+        buttonFinishGame.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finishGame();
+            }
+        });
     }
 
     private void finishGame() {
